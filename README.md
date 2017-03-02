@@ -1,17 +1,19 @@
 # GAN-Generative-Adversarial-Networks-Parte-I
 
-![output](data-h.jpg) ![output](deeplearningbrasil.png)
+[![Foo](data-h.jpg)](http://www.datah.com.br)
+[![Foo](deeplearningbrasil.png)](http://www.deeplearningbrasil.com.br)
 
-Introdução 
 
-Arquiteturas de redes neurais Generativas (ou geradoras) possuem como principal característica a habilidade de "aprender' a criar dados artificiais que são semelhantes a dados reais. A premissa básica é: "O que você não consegue criar, não consegue entender". Entretanto, seu entendimento e uso ainda não se apresentam como uma tarefa fácil. Neste post pretendemos descrever a formulação da GAN e fornecer um breve exemplo com código no TensorFlow para um problema relativamente simples e de fácil compreensão.
+# IntroduÃ§Ã£o 
 
-## Ambiente de codificação
+Arquiteturas de redes neurais Generativas (ou geradoras) possuem como principal caracterÃ­stica a habilidade de "aprender' a criar dados artificiais que sÃ£o semelhantes a dados reais. A premissa bÃ¡sica Ã©: "O que vocÃª nÃ£o consegue criar, nÃ£o consegue entender". Entretanto, seu entendimento e uso ainda nÃ£o se apresentam como uma tarefa fÃ¡cil. Neste post pretendemos descrever a formulaÃ§Ã£o da GAN e fornecer um breve exemplo com cÃ³digo no TensorFlow para um problema relativamente simples e de fÃ¡cil compreensÃ£o.
 
-O código deste exemplo foi testado no Linux Ubuntu 14 
+## Ambiente de codificaÃ§Ã£o
+
+O cÃ³digo deste exemplo foi testado no Linux Ubuntu 14 
 
 * Python 2.7
-* tensorflow (1.0) - Para versões < 1, descomente a linha 90 e comente a linha 92.
+* tensorflow (1.0) - Para versÃµes < 1, descomente a linha 90 e comente a linha 92.
 * matplotlib
 * numpy
 * scipy
@@ -22,53 +24,53 @@ Para executar:
 
 ## Compreendendo a Arquitetura
 
-A ideia da arquitetura GAN foi introduzida pela primeira vez em 2014 por um grupo de pesquisadores da Universidade de Montreal liderado por Ian Goodfellow (atualmente na OpenAI). A arquitetura básica é composta por duas redes neurais concorrentes conforme ilustrado abaixo:
+A ideia da arquitetura GAN foi introduzida pela primeira vez em 2014 por um grupo de pesquisadores da Universidade de Montreal liderado por Ian Goodfellow (atualmente na OpenAI). A arquitetura bÃ¡sica Ã© composta por duas redes neurais concorrentes conforme ilustrado abaixo:
 
 
 ![output](arquitetura_gan.jpg)
 
-Uma rede neural (chamada de geradora) toma "ruído" como entrada e gera dados em sua saída. A outra rede neural (chamada de discriminadora) recebe dados tanto da rede geradora quanto de dados reais de treinamento. A rede discriminadora deve ser capaz de distinguir entre as duas fontes, rotulando a informação como real ou sintética (falsa). Estas duas redes praticam um "jogo" contínuo, onde o gerador está aprendendo a produzir dados cada vez mais realistas, e a discriminadora está aprendendo a distinguir dados sintéticos de dados reais. Essas duas redes são treinadas simultaneamente com o objetivo de que a competição conduza a situação de que os dados sintéticos se tornem  indistinguíveis dos dados reais.
+Uma rede neural (chamada de geradora) toma "ruÃ­do" como entrada e gera dados em sua saÃ­da. A outra rede neural (chamada de discriminadora) recebe dados tanto da rede geradora quanto de dados reais de treinamento. A rede discriminadora deve ser capaz de distinguir entre as duas fontes, rotulando a informaÃ§Ã£o como real ou sintÃ©tica (falsa). Estas duas redes praticam um "jogo" contÃ­nuo, onde o gerador estÃ¡ aprendendo a produzir dados cada vez mais realistas, e a discriminadora estÃ¡ aprendendo a distinguir dados sintÃ©ticos de dados reais. Essas duas redes sÃ£o treinadas simultaneamente com o objetivo de que a competiÃ§Ã£o conduza a situaÃ§Ã£o de que os dados sintÃ©ticos se tornem  indistinguÃ­veis dos dados reais.
 
-## Explicação modo "Easy"
+## ExplicaÃ§Ã£o modo "Easy"
 
-Vamos utilizar o episódio No Weenies Allowed (Não adimitimos piralhos - tradução livre) do desenho Bob Esponja para explicar como funciona as GAN's. A função do segurança do clube (nosso discriminador GAN) é permitir a entrada somente de "caras fortes" e negar a entrada de "piralhos" curiosos. 
+Vamos utilizar o episÃ³dio No Weenies Allowed (NÃ£o adimitimos piralhos - traduÃ§Ã£o livre) do desenho Bob Esponja para explicar como funciona as GAN's. A funÃ§Ã£o do seguranÃ§a do clube (nosso discriminador GAN) Ã© permitir a entrada somente de "caras fortes" e negar a entrada de "piralhos" curiosos. 
 
 
 ![](http://vignette3.wikia.nocookie.net/spongebob/images/0/0c/Noweenie.jpg/revision/latest?cb=20121215100522).
 
-O segurança (D - discriminador) barra Bob Esponja (G - Gerador) por considerá-lo fracote. De fato Bob Esponja (G) é um imitador. Ele precisa se asemelhar o máximo possível para enganar o segurança. 
+O seguranÃ§a (D - discriminador) barra Bob Esponja (G - Gerador) por considerÃ¡-lo fracote. De fato Bob Esponja (G) Ã© um imitador. Ele precisa se asemelhar o mÃ¡ximo possÃ­vel para enganar o seguranÃ§a. 
 
 ![](https://thumbs.gear3rd.net/55,e595b57d79fbab.jpg)
 
-Bob esponja, tenta de todas as formas se disfarçar, alterando a sua aparência de modo a ficar similar aos indivíduos que adentram o clube para tentar "enganar" o segurança. O segurança em um primeiro momento observa aspectos óbvios que discrimine as duas categorias, cabe a Bob Esponja (G) imitar esses aspectos óbvios para não ser reconhecido. Uma vez que o discriminador (D) definiu algum aspecto como importante (a força, por exemplo), o gerador (G) usará essa informação para tentar "enganar" o discriminador.
+Bob esponja, tenta de todas as formas se disfarÃ§ar, alterando a sua aparÃªncia de modo a ficar similar aos indivÃ­duos que adentram o clube para tentar "enganar" o seguranÃ§a. O seguranÃ§a em um primeiro momento observa aspectos Ã³bvios que discrimine as duas categorias, cabe a Bob Esponja (G) imitar esses aspectos Ã³bvios para nÃ£o ser reconhecido. Uma vez que o discriminador (D) definiu algum aspecto como importante (a forÃ§a, por exemplo), o gerador (G) usarÃ¡ essa informaÃ§Ã£o para tentar "enganar" o discriminador.
 
 ![](bobesponja.png)
 
-O episódio segue com Bob Esponja (G) tentando exibir/imitar características que tentam enganar o segurança (D). Fazendo uma analogia com as imagens do desenho, é possível ilustrar na figura abaixo o funcionamento das redes. O geradaor terá números randômicos como entrada e produzirá imagens que serão avaliadas por uma rede de discriminação que determinará se a imagem é falsa ou real.
+O episÃ³dio segue com Bob Esponja (G) tentando exibir/imitar caracterÃ­sticas que tentam enganar o seguranÃ§a (D). Fazendo uma analogia com as imagens do desenho, Ã© possÃ­vel ilustrar na figura abaixo o funcionamento das redes. O geradaor terÃ¡ nÃºmeros randÃ´micos como entrada e produzirÃ¡ imagens que serÃ£o avaliadas por uma rede de discriminaÃ§Ã£o que determinarÃ¡ se a imagem Ã© falsa ou real.
 
 ![output](https://cdn-images-1.medium.com/max/1000/1*39Nnni_nhPDaLu9AnTLoWw.png)
 
 
 
 
-## Explicação modo "Hard"
+## ExplicaÃ§Ã£o modo "Hard"
 
-Se você não tem medo de matemática, vamos direto ao ponto. As redes GAN podem ser resumidas pela equação abaixo:
+Se vocÃª nÃ£o tem medo de matemÃ¡tica, vamos direto ao ponto. As redes GAN podem ser resumidas pela equaÃ§Ã£o abaixo:
 
 ![output](equacao_gan.png)
 
-Mas calma... se não entendeu, vamos compreendê-la.
+Mas calma... se nÃ£o entendeu, vamos compreendÃª-la.
 
-O gerador (G) e o driscriminador (D) geralmente são redes neurais do tipo "feedforward". A primeira parcela ![output](https://github.com/tensorflow/magenta/raw/master/magenta/reviews/assets/gan/image06.png) expressa que o discriminador (D) irá buscar os parâmetros da rede que a levem a discriminar entre dados reais e sintéticos. Já na segunda parcela ![output](https://github.com/tensorflow/magenta/raw/master/magenta/reviews/assets/gan/image13.png), o gerador (G) terá como objetivo gerar saídas que o discriminador (D) considere como real. A entrada z, é um vetor de ruídos de uma distribuição ![output](https://github.com/tensorflow/magenta/raw/master/magenta/reviews/assets/gan/image10.png). O discriminador recebe como entrada um conjunto de dados real (x) ou gerado (G(z)), e produz como saída uma probabilidade da entrada ser real P(x).
+O gerador (G) e o driscriminador (D) geralmente sÃ£o redes neurais do tipo "feedforward". A primeira parcela ![output](https://github.com/tensorflow/magenta/raw/master/magenta/reviews/assets/gan/image06.png) expressa que o discriminador (D) irÃ¡ buscar os parÃ¢metros da rede que a levem a discriminar entre dados reais e sintÃ©ticos. JÃ¡ na segunda parcela ![output](https://github.com/tensorflow/magenta/raw/master/magenta/reviews/assets/gan/image13.png), o gerador (G) terÃ¡ como objetivo gerar saÃ­das que o discriminador (D) considere como real. A entrada z, Ã© um vetor de ruÃ­dos de uma distribuiÃ§Ã£o ![output](https://github.com/tensorflow/magenta/raw/master/magenta/reviews/assets/gan/image10.png). O discriminador recebe como entrada um conjunto de dados real (x) ou gerado (G(z)), e produz como saÃ­da uma probabilidade da entrada ser real P(x).
 
-Ambas as partes das equações podem ser otimizadas de forma independente com métodos baseados em gradientes. Primeiro, faça um passo para maximizar o discriminador (D) ![output](https://github.com/tensorflow/magenta/raw/master/magenta/reviews/assets/gan/image08.png), depois faça um passo para otimizar o gerador (G) de modo a minimizar ![output](https://github.com/tensorflow/magenta/raw/master/magenta/reviews/assets/gan/image12.png) a separação encontrada pelo discriminador (D). Em termos práticos, estamos seguindo uma regra min-max da teoria dos jogos, uma rede joga contra a outra. 
+Ambas as partes das equaÃ§Ãµes podem ser otimizadas de forma independente com mÃ©todos baseados em gradientes. Primeiro, faÃ§a um passo para maximizar o discriminador (D) ![output](https://github.com/tensorflow/magenta/raw/master/magenta/reviews/assets/gan/image08.png), depois faÃ§a um passo para otimizar o gerador (G) de modo a minimizar ![output](https://github.com/tensorflow/magenta/raw/master/magenta/reviews/assets/gan/image12.png) a separaÃ§Ã£o encontrada pelo discriminador (D). Em termos prÃ¡ticos, estamos seguindo uma regra min-max da teoria dos jogos, uma rede joga contra a outra. 
 
 
-## Exemplo prático:
+## Exemplo prÃ¡tico:
 
-Para entender melhor como tudo isso funciona, usaremos um GAN para resolver um problema didátio usando o framework TensorFlow. O desafio é um "toy problem". A rede neural deverá ser capaz de aproximar uma distribuição Gaussiana unidimensional. O código-fonte completo está disponível em nosso Github ( https://github.com/AYLIEN/gan-intro ). Neste texto vamos focar nas partes mais importantes do código.
+Para entender melhor como tudo isso funciona, usaremos um GAN para resolver um problema didÃ¡tio usando o framework TensorFlow. O desafio Ã© um "toy problem". A rede neural deverÃ¡ ser capaz de aproximar uma distribuiÃ§Ã£o Gaussiana unidimensional. O cÃ³digo-fonte completo estÃ¡ disponÃ­vel em nosso Github ( https://github.com/deeplearningbrasil/gan-generative-adversarial-networks-parte-I/gan.py ). Neste texto vamos focar nas partes mais importantes do cÃ³digo.
 
-Primeiro criamos o conjunto de dados "real", um curva gaussiana simples com média igual a 4 (quatro) e desvio padrão de 0,5. Para isso, implementamos a função abaixo na linguagem python, que retorna um determinado número de amostras da distribuição de dados (gaussiana).
+Primeiro criamos o conjunto de dados "real", um curva gaussiana simples com mÃ©dia igual a 4 (quatro) e desvio padrÃ£o de 0,5. Para isso, implementamos a funÃ§Ã£o abaixo na linguagem python, que retorna um determinado nÃºmero de amostras da distribuiÃ§Ã£o de dados (gaussiana).
 
 ```python
 class distribuicaoDados(object):
@@ -82,7 +84,7 @@ class distribuicaoDados(object):
 ```
 
 
-Definiremos também os dados de entrada para a rede neural geradora, utilizando a mesma função de distribuição de dados, porém, perturbando os dados com ruído artificial. 
+Definiremos tambÃ©m os dados de entrada para a rede neural geradora, utilizando a mesma funÃ§Ã£o de distribuiÃ§Ã£o de dados, porÃ©m, perturbando os dados com ruÃ­do artificial. 
 
 
 ```python
@@ -94,7 +96,7 @@ class distribuicaoDados(object):
        return np.linspace(-self.range, self.range, N) + np.random.random(N)  0.01
 ```
    
-Nosso gerador, por simplicidade deste exemplo, não será uma rede neural propriamente dita. Será uma função linear, seguida por uma não-linear e por fim uma nova função linear, conforme codificado abaixo.
+Nosso gerador, por simplicidade deste exemplo, nÃ£o serÃ¡ uma rede neural propriamente dita. SerÃ¡ uma funÃ§Ã£o linear, seguida por uma nÃ£o-linear e por fim uma nova funÃ§Ã£o linear, conforme codificado abaixo.
 
 ```python
 def gerador(input, hidden_size):
@@ -104,7 +106,7 @@ def gerador(input, hidden_size):
     return passo3            `
 ```
     
-Neste caso, é importante que o discriminador seja mais "poderoso" do que o gerador, ou então, corremos o risco de que ele não tenha capacidade suficiente para distinguir entre os dados sintéticos e os reais. Logo, vamos definir uma rede neural com funções tanh (não-lineares) em todas as camadas, exceto na final, que conterá uma função sigmóide que irá gerar valores entre 0 e 1 que podem ser interpretados como o resultado de probabilidade de ser verdadeiro (valor 1) ou falso (valor 0).
+Neste caso, Ã© importante que o discriminador seja mais "poderoso" do que o gerador, ou entÃ£o, corremos o risco de que ele nÃ£o tenha capacidade suficiente para distinguir entre os dados sintÃ©ticos e os reais. Logo, vamos definir uma rede neural com funÃ§Ãµes tanh (nÃ£o-lineares) em todas as camadas, exceto na final, que conterÃ¡ uma funÃ§Ã£o sigmÃ³ide que irÃ¡ gerar valores entre 0 e 1 que podem ser interpretados como o resultado de probabilidade de ser verdadeiro (valor 1) ou falso (valor 0).
 
 ```python
 def discriminador(input, h_dim, minibatch_layer=True):
@@ -114,7 +116,7 @@ def discriminador(input, h_dim, minibatch_layer=True):
     passo2_h1 = tf.tanh(passo1_h1)
 ```
     
-Agora podemos colocar as funções já desenvolvidas em um "TensorFlow graph" e também definir uma função de "perda" , geralmente chamada de "loss" nos artigos científicos (relação entre o que se espera e o que foi obtido), tendo como alvo a situação em que o discriminador não seja capaz de distinguir entre o dado sintético e o verdadeiro.
+Agora podemos colocar as funÃ§Ãµes jÃ¡ desenvolvidas em um "TensorFlow graph" e tambÃ©m definir uma funÃ§Ã£o de "perda" , geralmente chamada de "loss" nos artigos cientÃ­ficos (relaÃ§Ã£o entre o que se espera e o que foi obtido), tendo como alvo a situaÃ§Ã£o em que o discriminador nÃ£o seja capaz de distinguir entre o dado sintÃ©tico e o verdadeiro.
 
 ```python
         with tf.variable_scope('Gen'):
@@ -133,7 +135,7 @@ Agora podemos colocar as funções já desenvolvidas em um "TensorFlow graph" e tam
         self.loss_g = tf.reduce_mean(-tf.log(self.D2))
 ```
 
-Criamos funções de otimização para cada rede usando o critério de GradientDescentOptimizer do TensorFlow com taxa de aprendizado com decaimento exponencial. Note que existem alguns conceitos envolvidos aqui. O completo entendimento e compreensão dos parâmetros de otimização requer alguma experiência prévia com otimização e de redes neurais artificiais.
+Criamos funÃ§Ãµes de otimizaÃ§Ã£o para cada rede usando o critÃ©rio de GradientDescentOptimizer do TensorFlow com taxa de aprendizado com decaimento exponencial. Note que existem alguns conceitos envolvidos aqui. O completo entendimento e compreensÃ£o dos parÃ¢metros de otimizaÃ§Ã£o requer alguma experiÃªncia prÃ©via com otimizaÃ§Ã£o e de redes neurais artificiais.
 
 ```python
     def otimizador(erro, var_list, taxa_aprendizado_inicial):
@@ -155,7 +157,7 @@ Criamos funções de otimização para cada rede usando o critério de GradientDescen
         return otimizador
 ```
     
-Para treinar a GAN, obtém-se pontos da distribuição de dados e da distribuição sintética e alternamos entre otimizar os parâmetros do discriminador e do gerador.
+Para treinar a GAN, obtÃ©m-se pontos da distribuiÃ§Ã£o de dados e da distribuiÃ§Ã£o sintÃ©tica e alternamos entre otimizar os parÃ¢metros do discriminador e do gerador.
 
  ```python
         def train(self):
@@ -178,20 +180,22 @@ Para treinar a GAN, obtém-se pontos da distribuição de dados e da distribuição s
             })
 ```
 
-O vídeo abaixo mostra a sequência de épocas de treinamento em que a rede geradora tenta aprender a imitar a distribuição real dos dados durante o treinamento. É possível notar que no início, a rede geradora produz uma distribuição muito distinta da real. Com o treinamento a rede consegue gerar uma distribuição similar a real.
+O vÃ­deo abaixo mostra a sequÃªncia de Ã©pocas de treinamento em que a rede geradora tenta aprender a imitar a distribuiÃ§Ã£o real dos dados durante o treinamento. Ã‰ possÃ­vel notar que no inÃ­cio, a rede geradora produz uma distribuiÃ§Ã£o muito distinta da real. Com o treinamento a rede consegue gerar uma distribuiÃ§Ã£o similar a real.
 
 Video:
 <a href="http://www.youtube.com/watch?feature=player_embedded&v=Z-9DWDnT9lA
 " target="_blank"><img src="http://img.youtube.com/vi/Z-9DWDnT9lA/0.jpg" 
-alt="Demonstração treinamento GAN" width="340" height="280" border="1" /></a>
+alt="DemonstraÃ§Ã£o treinamento GAN" width="340" height="280" border="1" /></a>
 
 
-Talvez um dos fatos mais instigantes das redes GAN's esteja no fato de que as redes competem entre si pelo melhor resultado, porém, só o conseguirão em caso de equilíbrio entre o resultado de ambas. A figura abaixo mostra a evolução da função de erro ou perda nas primeiras gerações. A medida que uma rede melhora o seu resultado o da outra piora. Este "ponto de equilíbrio" atualmente é o maior desafio em aberto no processo de treinamento deste tipo de rede neural.
+Talvez um dos fatos mais instigantes das redes GAN's esteja no fato de que as redes competem entre si pelo melhor resultado, porÃ©m, sÃ³ o conseguirÃ£o em caso de equilÃ­brio entre o resultado de ambas. A figura abaixo mostra a evoluÃ§Ã£o da funÃ§Ã£o de erro ou perda nas primeiras geraÃ§Ãµes. A medida que uma rede melhora o seu resultado o da outra piora. Este "ponto de equilÃ­brio" atualmente Ã© o maior desafio em aberto no processo de treinamento deste tipo de rede neural.
 
 ![output](treinamento-gan.png)
 
-## Considerações Finais
+## ConsideraÃ§Ãµes Finais
 
-Redes GAN apresentam-se como uma ideia bastante interessante, dando-nos uma nova abordagem no processo de aprendizagem. As aplicações  bem sucedidas de GANs ainda estão em problemas de visão computacional. O critério de parada do processo de treinamento ainda é um problema em aberto. Em aplicações de visão computacional podemos olhar para as imagens geradas e fazer um julgamento se a solução é satisfatória, contudo, em outros tipos de aplicações, esse tipo de observação não é trivial.
+Redes GAN apresentam-se como uma ideia bastante interessante, dando-nos uma nova abordagem no processo de aprendizagem. As aplicaÃ§Ãµes  bem sucedidas de GANs ainda estÃ£o em problemas de visÃ£o computacional. O critÃ©rio de parada do processo de treinamento ainda Ã© um problema em aberto. Em aplicaÃ§Ãµes de visÃ£o computacional podemos olhar para as imagens geradas e fazer um julgamento se a soluÃ§Ã£o Ã© satisfatÃ³ria, contudo, em outros tipos de aplicaÃ§Ãµes, esse tipo de observaÃ§Ã£o nÃ£o Ã© trivial.
 
-Apesar destas limitações e dificuldades, a comunidade científica em geral está bastante animada em razão da premissa básica de que, conseguimos entender aquilo que conseguimos gerar, logo, os primeiros passos foram dados para que em breve tenhamos redes neurais artificiais que de fato consigam aprender "sozinhas" a partir de uma base de conhecimento. Nessa situação, podemos imaginar por exemplo, redes neurais que escrevem textos a partir de um simples depósito de coletâneas de artigos em sua base de dados ou que componham músicas a partir de uma biblioteca digital qualquer. Por fim, diria que a GAN é um touro arisco em processo de domesticação, quem conseguir o feito certamente levará o grande prêmio. Façam suas apostas.
+Apesar destas limitaÃ§Ãµes e dificuldades, a comunidade cientÃ­fica em geral estÃ¡ bastante animada em razÃ£o da premissa bÃ¡sica de que, conseguimos entender aquilo que conseguimos gerar, logo, os primeiros passos foram dados para que em breve tenhamos redes neurais artificiais que de fato consigam aprender "sozinhas" a partir de uma base de conhecimento. Nessa situaÃ§Ã£o, podemos imaginar por exemplo, redes neurais que escrevem textos a partir de um simples depÃ³sito de coletÃ¢neas de artigos em sua base de dados ou que componham mÃºsicas a partir de uma biblioteca digital qualquer. Por fim, diria que a GAN Ã© um touro arisco em processo de domesticaÃ§Ã£o, quem conseguir o feito certamente levarÃ¡ o grande prÃªmio. FaÃ§am suas apostas.
+
+Elaborado por: Anderson Soares ( www.inf.ufg.br/~anderson )
