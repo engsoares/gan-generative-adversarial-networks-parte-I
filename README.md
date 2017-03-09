@@ -192,10 +192,16 @@ Talvez um dos fatos mais instigantes das redes GAN's esteja no fato de que as re
 
 ![output](treinamento-gan.png)
 
+
 ## Considerações Finais
 
 Redes GAN apresentam-se como uma ideia bastante interessante, dando-nos uma nova abordagem no processo de aprendizagem. As aplicações  bem sucedidas de GANs ainda estão em problemas de visão computacional. O critério de parada do processo de treinamento ainda é um problema em aberto. Em aplicações de visão computacional podemos olhar para as imagens geradas e fazer um julgamento se a solução é satisfatória, contudo, em outros tipos de aplicações, esse tipo de observação não é trivial.
 
 Apesar destas limitações e dificuldades, a comunidade científica em geral está bastante animada em razão da premissa básica de que, conseguimos entender aquilo que conseguimos gerar, logo, os primeiros passos foram dados para que em breve tenhamos redes neurais artificiais que de fato consigam aprender "sozinhas" a partir de uma base de conhecimento. Nessa situação, podemos imaginar por exemplo, redes neurais que escrevem textos a partir de um simples depósito de coletâneas de artigos em sua base de dados ou que componham músicas a partir de uma biblioteca digital qualquer. Por fim, diria que a GAN é um touro arisco em processo de domesticação, quem conseguir o feito certamente levará o grande prêmio. Façam suas apostas.
+
+Na parte II vamos detalher o código para gerar imagens sintéticas, como por exemplo, dos resultados abaixo:
+
+![output](before_training_generator.gif)
+![output](after_training_generator.gif)
 
 Elaborado por: Anderson Soares ( www.inf.ufg.br/~anderson )
